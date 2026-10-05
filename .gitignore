@@ -1,0 +1,10 @@
+.env
+.env.local
+.claude/
+node_modules/
+dist/
+.DS_Store
+.playwright-mcp/
+# Customer data never goes into this public repo
+*.csv
+*.sqlite

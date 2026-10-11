@@ -9,6 +9,7 @@ import {
 } from '../lib/fields'
 import { RecordFields, RecordModal, type Values } from '../components/RecordForm'
 import { toDb, toForm } from '../lib/form'
+import { formatTelefon, toUrl } from '../lib/mask'
 import { Section } from '../components/Section'
 import { Dokumente } from '../components/Dokumente'
 import { ErfasstBadges, KuendigungHinweise } from '../components/FirmaInfo'
@@ -109,8 +110,8 @@ function FirmaDetailPage({ id }: { id: number }) {
             </div>
           </div>
 
-          <div className="grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2 lg:grid-cols-4">
-            <Info label="Tenant" value={firma.tenant} />
+          <div className="grid gap-x-6 gap-y-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+            <Info label="Tenant" value={firma.tenant} link />
             <Info label="Timetracker-Kunde" value={customer?.name} />
             <Info label="Strahlhorn-User" value={firma.anzahl_strahlhorn_user?.toString()} />
             <Info label="Adresse" value={firma.adresse} pre />
@@ -140,7 +141,7 @@ function FirmaDetailPage({ id }: { id: number }) {
         </div>
       </div>
 
-      <div role="tablist" className="tabs tabs-box mb-4 overflow-x-auto flex-nowrap">
+      <div role="tablist" className="tabs tabs-border mb-4 overflow-x-auto flex-nowrap">
         {TABS.map(t => (
           <button key={t} role="tab" className={`tab ${tab === t ? 'tab-active' : ''}`} onClick={() => setTab(t)}>{t}</button>
         ))}
@@ -157,7 +158,7 @@ function FirmaDetailPage({ id }: { id: number }) {
               { label: 'Name', render: k => k.name },
               { label: 'Rollen', render: k => <RollenBadges rollen={k.rollen} /> },
               { label: 'E-Mail', render: k => k.email && <a className="link" href={`mailto:${k.email}`}>{k.email}</a> },
-              { label: 'Telefon', render: k => k.telefon },
+              { label: 'Telefon', render: k => k.telefon && <span className="whitespace-nowrap">{formatTelefon(k.telefon)}</span> },
               { label: 'Segment', render: k => k.ml_segment },
             ]}
           />
@@ -212,11 +213,13 @@ function FirmaDetailPage({ id }: { id: number }) {
   )
 }
 
-function Info({ label, value, pre }: { label: string; value: string | null | undefined; pre?: boolean }) {
+function Info({ label, value, pre, link }: { label: string; value: string | null | undefined; pre?: boolean; link?: boolean }) {
   return (
     <div>
-      <span className="opacity-60">{label}: </span>
-      <span className={pre ? 'whitespace-pre-line' : ''}>{value || '–'}</span>
+      <div className="text-xs opacity-60">{label}</div>
+      {link && value
+        ? <a className="link break-all" href={toUrl(value)} target="_blank" rel="noopener noreferrer">{value.replace(/^https?:\/\//i, '')}</a>
+        : <div className={pre ? 'whitespace-pre-line' : ''}>{value || '–'}</div>}
     </div>
   )
 }

@@ -1,7 +1,8 @@
-import { useId, useState } from 'react'
+import { useId, useLayoutEffect, useRef, useState } from 'react'
 import { toDb, toForm } from '../lib/form'
+import { EMAIL_PATTERN, formatEmail, formatTelefon, isEmailChar, isTelefonChar } from '../lib/mask'
 
-export type FieldType = 'text' | 'email' | 'url' | 'date' | 'number' | 'textarea' | 'multi' | 'select'
+export type FieldType = 'text' | 'email' | 'tel' | 'url' | 'date' | 'number' | 'textarea' | 'multi' | 'select'
 
 export interface Field {
   key: string
@@ -15,6 +16,42 @@ export interface Field {
 }
 
 export type Values = Record<string, unknown>
+
+// Text input that reformats while typing and keeps the caret in place:
+// the caret stays behind the same number of significant characters as before formatting.
+function MaskedInput({ value, onChange, format, isSignificant, ...props }: {
+  value: string
+  onChange: (v: string) => void
+  format: (raw: string) => string
+  isSignificant: (c: string) => boolean
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'>) {
+  const ref = useRef<HTMLInputElement>(null)
+  const caret = useRef<number | null>(null)
+
+  useLayoutEffect(() => {
+    if (caret.current === null || !ref.current) return
+    let pos = 0
+    for (let seen = 0; pos < value.length && seen < caret.current; pos++) {
+      if (isSignificant(value[pos])) seen++
+    }
+    ref.current.setSelectionRange(pos, pos)
+    caret.current = null
+  })
+
+  return (
+    <input
+      {...props}
+      ref={ref}
+      className="input input-bordered w-full"
+      value={value}
+      onChange={e => {
+        const before = e.target.value.slice(0, e.target.selectionStart ?? e.target.value.length)
+        caret.current = [...before].filter(isSignificant).length
+        onChange(format(e.target.value))
+      }}
+    />
+  )
+}
 
 function FieldInput({ field, value, onChange }: {
   field: Field
@@ -53,10 +90,32 @@ function FieldInput({ field, value, onChange }: {
   if (field.type === 'textarea') {
     return <textarea className="textarea textarea-bordered w-full" rows={3} value={value as string} onChange={e => onChange(e.target.value)} />
   }
+  if (field.type === 'tel') {
+    return (
+      <MaskedInput
+        type="tel" value={value as string} onChange={onChange} required={field.required}
+        format={formatTelefon} isSignificant={isTelefonChar} placeholder="079 123 45 67"
+      />
+    )
+  }
+  if (field.type === 'email') {
+    // type="text": the selection API needed for the mask is not available on type="email"
+    return (
+      <MaskedInput
+        type="text" inputMode="email" autoCapitalize="off" spellCheck={false}
+        value={value as string} onChange={onChange} required={field.required}
+        format={formatEmail} isSignificant={isEmailChar}
+        pattern={EMAIL_PATTERN} title="E-Mail-Adresse im Format name@firma.ch" placeholder="name@firma.ch"
+      />
+    )
+  }
   return (
     <>
       <input
-        type={field.type}
+        // url: plain text, https:// is added on save
+        type={field.type === 'url' ? 'text' : field.type}
+        inputMode={field.type === 'url' ? 'url' : undefined}
+        placeholder={field.type === 'url' ? 'https://…' : undefined}
         className="input input-bordered w-full"
         value={value as string}
         required={field.required}

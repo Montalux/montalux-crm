@@ -13,7 +13,7 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-base-200">
-      <div className="navbar bg-base-100 shadow-sm flex-wrap">
+      <div className="navbar bg-base-100 shadow-sm flex-wrap md:flex-nowrap">
         <div className="navbar-start">
           <NavLink to="/" className="btn btn-ghost text-xl">Kunden-CRM</NavLink>
         </div>

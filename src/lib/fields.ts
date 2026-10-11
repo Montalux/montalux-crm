@@ -8,7 +8,7 @@ export function firmaFields(customers: Customer[]): Field[] {
     { key: 'name', label: 'Name', type: 'text', required: true },
     { key: 'kuerzel', label: 'Kürzel', type: 'text' },
     { key: 'status', label: 'Status', type: 'select', required: true, options: STATUS },
-    { key: 'tenant', label: 'Tenant', type: 'text' },
+    { key: 'tenant', label: 'Tenant (URL)', type: 'url' },
     {
       key: 'customer_id', label: 'Kunde im Timetracker', type: 'select',
       options: customers.map(c => ({ value: String(c.id), label: c.active ? c.name : `${c.name} (inaktiv)` })),
@@ -23,7 +23,7 @@ export const kontaktFields: Field[] = [
   { key: 'name', label: 'Name', type: 'text', required: true },
   { key: 'rollen', label: 'Rollen', type: 'multi', options: ROLLEN },
   { key: 'email', label: 'E-Mail', type: 'email' },
-  { key: 'telefon', label: 'Telefon', type: 'text' },
+  { key: 'telefon', label: 'Telefon', type: 'tel' },
   { key: 'ml_segment', label: 'MailerLite-Segment', type: 'text' },
   { key: 'notiz', label: 'Notiz', type: 'textarea' },
 ]

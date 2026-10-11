@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useFirmen } from '../hooks/useData'
 import { ErfasstBadges, KuendigungHinweise } from '../components/FirmaInfo'
 import { RollenBadges, Spinner, StatusBadge } from '../components/ui'
+import { formatTelefon } from '../lib/mask'
 import { addDays, dt, FAELLIG_VORLAUF_TAGE, ROLLEN, STATUS, todayLocal } from '../lib/crm'
 
 export default function OverviewPage() {
@@ -96,7 +97,7 @@ export default function OverviewPage() {
                       <span className="font-medium">{k.name}</span>
                       <RollenBadges rollen={k.rollen} />
                       {k.email && <a href={`mailto:${k.email}`} className="link link-hover">{k.email}</a>}
-                      {k.telefon && <a href={`tel:${k.telefon}`} className="link link-hover">{k.telefon}</a>}
+                      {k.telefon && <a href={`tel:${k.telefon.replace(/\s/g, '')}`} className="link link-hover whitespace-nowrap">{formatTelefon(k.telefon)}</a>}
                     </li>
                   ))}
                 </ul>

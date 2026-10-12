@@ -23,7 +23,7 @@ Rollen: Entscheider, Fachlich, Technisch, Rechnung, Datenschutz. Status: Kunde, 
 ## Funktionen (Reihenfolge = Priorität)
 
 1. **Übersicht:** Karte pro Firma mit Status, Kürzel, Kontakten mit Rollen, E-Mail, Telefon. Suche über Firma, Kürzel, Tenant, Kontakt, E-Mail. Filter nach Status und Rolle.
-2. **Erfasst im CRM** (pro Firma, in Übersicht und Detail): Anzahl Kontakte, Lizenzen, Module, aktuelle AVV-Version oder «kein AVV», Hinweis pro fehlender Rolle.
+2. **Erfasst im CRM** (pro Firma, in Übersicht und Detail): Anzahl Kontakte, Lizenzen, Module, aktuelle AVV-Version oder «kein AVV». Fehlende Rollen werden bewusst nicht angezeigt (zu viel Lärm).
 3. **Firmenseite:** Stammdaten plus Kontakte, Lizenzen, Module, AVV mit Hinzufügen, Bearbeiten, Löschen. Firma löschen mit Bestätigung (Kaskade).
 4. **Kündigungsfristen:** «Kündigen bis» = Ende minus Frist in Tagen. Zustände: `ok`, `soon` (bis 90 Tage), `missed` (Frist verstrichen, Lizenz läuft noch), `expired`. Auf der Übersicht Hinweis bei `soon` und `missed`.
 5. **Export MailerLite:** CSV mit `email, name, last_name, company, rollen, segment`, filterbar nach Segment, Rolle, Status. Nur Kontakte mit E-Mail. Nachname = letztes Wort von `name`.

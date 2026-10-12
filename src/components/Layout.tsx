@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 const NAV = [
@@ -15,14 +15,14 @@ export default function Layout() {
     <div className="min-h-screen bg-base-200">
       <div className="navbar bg-base-100 shadow-sm flex-wrap md:flex-nowrap">
         <div className="navbar-start">
-          <NavLink to="/" className="btn btn-ghost text-xl">Kunden-CRM</NavLink>
+          <Link to="/" className="btn btn-ghost text-xl">Kunden-CRM</Link>
         </div>
         {hasCrmAccess && (
           <div className="navbar-center order-last w-full justify-center md:order-none md:w-auto">
             <ul className="menu menu-horizontal px-1 gap-1">
               {NAV.map(n => (
                 <li key={n.to}>
-                  <NavLink to={n.to} end={n.end} className={({ isActive }) => isActive ? 'active' : ''}>{n.label}</NavLink>
+                  <NavLink to={n.to} end={n.end} className={({ isActive }) => isActive ? 'bg-primary! text-primary-content! font-medium' : ''}>{n.label}</NavLink>
                 </li>
               ))}
             </ul>

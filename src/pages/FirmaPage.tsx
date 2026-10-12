@@ -157,7 +157,7 @@ function FirmaDetailPage({ id }: { id: number }) {
             columns={[
               { label: 'Name', render: k => k.name },
               { label: 'Rollen', render: k => <RollenBadges rollen={k.rollen} /> },
-              { label: 'E-Mail', render: k => k.email && <a className="link" href={`mailto:${k.email}`}>{k.email}</a> },
+              { label: 'E-Mail', render: k => k.email && <a className="link link-hover" href={`mailto:${k.email}`}>{k.email}</a> },
               { label: 'Telefon', render: k => k.telefon && <span className="whitespace-nowrap">{formatTelefon(k.telefon)}</span> },
               { label: 'Segment', render: k => k.ml_segment },
             ]}

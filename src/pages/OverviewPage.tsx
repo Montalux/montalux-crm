@@ -4,7 +4,7 @@ import { useFirmen } from '../hooks/useData'
 import { ErfasstBadges, KuendigungHinweise } from '../components/FirmaInfo'
 import { RollenBadges, Spinner, StatusBadge } from '../components/ui'
 import { formatTelefon } from '../lib/mask'
-import { addDays, dt, FAELLIG_VORLAUF_TAGE, ROLLEN, STATUS, todayLocal } from '../lib/crm'
+import { addDays, dt, FAELLIG_VORLAUF_TAGE, ROLLEN, STATUS, STATUS_RAND, todayLocal } from '../lib/crm'
 
 export default function OverviewPage() {
   const { firmen, loading, error } = useFirmen()
@@ -81,7 +81,7 @@ export default function OverviewPage() {
 
       <div className="grid gap-4 md:grid-cols-2">
         {gefiltert.map(f => (
-          <div key={f.id} className="card bg-base-100 shadow-md">
+          <div key={f.id} className={`card bg-base-100 shadow-md border-l-4 ${STATUS_RAND[f.status] ?? 'border-base-300'}`}>
             <div className="card-body gap-3">
               <div className="flex flex-wrap items-center gap-2">
                 <Link to={`/firma/${f.id}`} className="card-title link link-hover">{f.name}</Link>
@@ -91,13 +91,13 @@ export default function OverviewPage() {
               <ErfasstBadges firma={f} />
               <KuendigungHinweise firma={f} />
               {f.kontakt.length > 0 && (
-                <ul className="text-sm space-y-1">
+                <ul className="text-sm divide-y divide-base-200 border-t border-base-200">
                   {[...f.kontakt].sort((a, b) => a.name.localeCompare(b.name)).map(k => (
-                    <li key={k.id} className="flex flex-wrap gap-x-2 items-center">
-                      <span className="font-medium">{k.name}</span>
-                      <RollenBadges rollen={k.rollen} />
-                      {k.email && <a href={`mailto:${k.email}`} className="link link-hover">{k.email}</a>}
-                      {k.telefon && <a href={`tel:${k.telefon.replace(/\s/g, '')}`} className="link link-hover whitespace-nowrap">{formatTelefon(k.telefon)}</a>}
+                    <li key={k.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-1.5">
+                      <span className="font-medium sm:w-40 sm:shrink-0">{k.name}</span>
+                      {k.email && <a href={`mailto:${k.email}`} className="link link-hover text-base-content/70">{k.email}</a>}
+                      {k.telefon && <a href={`tel:${k.telefon.replace(/\s/g, '')}`} className="link link-hover text-base-content/70 whitespace-nowrap">{formatTelefon(k.telefon)}</a>}
+                      <span className="sm:ml-auto"><RollenBadges rollen={k.rollen} /></span>
                     </li>
                   ))}
                 </ul>

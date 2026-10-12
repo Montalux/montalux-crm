@@ -10,9 +10,17 @@ export const BUCKET = 'crm-dokumente'
 export const ROLLEN_FARBE: Record<string, string> = {
   Entscheider: 'badge-error',
   Fachlich: 'badge-info',
-  Technisch: 'badge-accent',
+  Technisch: 'badge-neutral',
   Rechnung: 'badge-warning',
   Datenschutz: 'badge-primary',
+}
+
+// Coloured left edge of a Firma card
+export const STATUS_RAND: Record<string, string> = {
+  Kunde: 'border-success',
+  Pilot: 'border-info',
+  Interessent: 'border-warning',
+  'Ex-Kunde': 'border-base-300',
 }
 
 export const STATUS_FARBE: Record<string, string> = {
@@ -104,15 +112,13 @@ export function aktuellerAvv(avv: Avv[]): Avv | null {
   return [...avv].sort((a, b) => (a.unterzeichnet_am ?? '').localeCompare(b.unterzeichnet_am ?? '')).at(-1) ?? null
 }
 
-// Port of firma_stats(): counts per area, missing roles, current AVV version
+// Port of firma_stats(): counts per area, current AVV version
 export function firmaStats(f: FirmaFull) {
-  const rollen = new Set(f.kontakt.flatMap(k => k.rollen))
   return {
     kontakte: f.kontakt.length,
     lizenzen: f.lizenz.length,
     module: f.modul.length,
     avvVersion: aktuellerAvv(f.avv)?.version ?? null,
-    fehlendeRollen: ROLLEN.filter(r => !rollen.has(r)),
   }
 }
 

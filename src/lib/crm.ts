@@ -12,7 +12,7 @@ export const ROLLEN_FARBE: Record<string, string> = {
   Fachlich: 'badge-info',
   Technisch: 'badge-neutral',
   Rechnung: 'badge-warning',
-  Datenschutz: 'badge-primary',
+  Datenschutz: 'badge-success',
 }
 
 // Coloured left edge of a Firma card

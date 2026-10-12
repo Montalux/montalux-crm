@@ -97,7 +97,7 @@ export default function OverviewPage() {
                       <span className="font-medium sm:w-40 sm:shrink-0">{k.name}</span>
                       {k.email && <a href={`mailto:${k.email}`} className="link link-hover text-base-content/70">{k.email}</a>}
                       {k.telefon && <a href={`tel:${k.telefon.replace(/\s/g, '')}`} className="link link-hover text-base-content/70 whitespace-nowrap">{formatTelefon(k.telefon)}</a>}
-                      <span className="sm:ml-auto"><RollenBadges rollen={k.rollen} /></span>
+                      <span className="ml-auto shrink-0"><RollenBadges rollen={k.rollen} kompakt /></span>
                     </li>
                   ))}
                 </ul>

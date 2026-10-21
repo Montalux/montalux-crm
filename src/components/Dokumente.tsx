@@ -4,6 +4,7 @@ import { BUCKET, dt } from '../lib/crm'
 import { dokumentFields } from '../lib/fields'
 import { deleteRecord, saveRecord } from '../hooks/useData'
 import { RecordFields } from './RecordForm'
+import { IconButton } from './ui'
 import { toDb, toForm } from '../lib/form'
 import { openDokument } from '../lib/dokument'
 import type { Dokument } from '../types/database'
@@ -48,8 +49,8 @@ export function Dokumente({ firmaId, rows, onChanged }: { firmaId: number; rows:
                     <td>{dt(d.datum)}</td>
                     <td className="max-w-xs truncate">{d.bemerkung}</td>
                     <td className="whitespace-nowrap text-right">
-                      <button className="btn btn-ghost btn-xs" onClick={() => setEditing(d)}>Bearbeiten</button>
-                      <button className="btn btn-ghost btn-xs text-error" onClick={() => remove(d)}>Löschen</button>
+                      <IconButton icon="edit" label="Bearbeiten" onClick={() => setEditing(d)} />
+                      <IconButton icon="delete" label="Löschen" danger onClick={() => remove(d)} />
                     </td>
                   </tr>
                 ))}

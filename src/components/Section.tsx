@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { RecordModal, type Field, type Values } from './RecordForm'
 import { deleteRecord, saveRecord } from '../hooks/useData'
+import { IconButton } from './ui'
 
 export interface Column<T> {
   label: string
@@ -57,8 +58,8 @@ export function Section<T extends { id: number }>({ title, table, firmaId, rows,
                     {columns.map(c => <td key={c.label} className={c.className}>{c.render(r)}</td>)}
                     <td className="whitespace-nowrap text-right">
                       {actions?.(r)}
-                      <button className="btn btn-ghost btn-xs" onClick={() => setEditing(r as unknown as Values)}>Bearbeiten</button>
-                      <button className="btn btn-ghost btn-xs text-error" onClick={() => remove(r)}>Löschen</button>
+                      <IconButton icon="edit" label="Bearbeiten" onClick={() => setEditing(r as unknown as Values)} />
+                      <IconButton icon="delete" label="Löschen" danger onClick={() => remove(r)} />
                     </td>
                   </tr>
                 ))}

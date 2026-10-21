@@ -14,7 +14,7 @@ import { downloadVcard } from '../lib/vcard'
 import { Section } from '../components/Section'
 import { Dokumente } from '../components/Dokumente'
 import { ErfasstBadges, KuendigungHinweise } from '../components/FirmaInfo'
-import { Flash, RollenBadges, Spinner, StatusBadge } from '../components/ui'
+import { Flash, IconButton, RollenBadges, Spinner, StatusBadge } from '../components/ui'
 import type { AboStand, Avv, Kontakt, Lizenz, Modul, Projekt, StundenMonat, Wiedervorlage } from '../types/database'
 
 const TABS = ['Kontakte', 'Vertrag', 'Projekte', 'Dokumente', 'Stunden'] as const
@@ -165,7 +165,7 @@ function FirmaDetailPage({ id }: { id: number }) {
               { label: 'Mobile', render: k => k.mobile && <span className="whitespace-nowrap">{formatTelefon(k.mobile)}</span> },
               { label: 'Segment', render: k => k.ml_segment },
             ]}
-            actions={k => <button className="btn btn-ghost btn-xs" title="Als vCard herunterladen" onClick={() => downloadVcard(k, firma)}>vCard</button>}
+            actions={k => <IconButton icon="vcard" label="vCard herunterladen" onClick={() => downloadVcard(k, firma)} />}
           />
         )}
 

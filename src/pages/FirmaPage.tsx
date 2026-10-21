@@ -157,7 +157,7 @@ function FirmaDetailPage({ id }: { id: number }) {
             fields={kontaktFields}
             deleteLabel={k => k.name}
             columns={[
-              { label: 'Name', render: k => k.name },
+              { label: 'Name', render: k => <span className="font-bold">{k.name}</span> },
               { label: 'Funktion', render: k => k.funktion },
               { label: 'Rollen', render: k => <RollenBadges rollen={k.rollen} /> },
               { label: 'E-Mail', render: k => k.email && <a className="link link-hover" href={`mailto:${k.email}`}>{k.email}</a> },

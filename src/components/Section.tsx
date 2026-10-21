@@ -9,7 +9,7 @@ export interface Column<T> {
 }
 
 // Table of child records of a Firma with add/edit/delete via RecordModal
-export function Section<T extends { id: number }>({ title, table, firmaId, rows, columns, fields, onChanged, deleteLabel }: {
+export function Section<T extends { id: number }>({ title, table, firmaId, rows, columns, fields, onChanged, deleteLabel, actions }: {
   title: string
   table: string
   firmaId: number
@@ -18,6 +18,7 @@ export function Section<T extends { id: number }>({ title, table, firmaId, rows,
   fields: Field[]
   onChanged: () => void
   deleteLabel: (row: T) => string
+  actions?: (row: T) => React.ReactNode // extra buttons before Bearbeiten/Löschen
 }) {
   const [editing, setEditing] = useState<Values | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -55,6 +56,7 @@ export function Section<T extends { id: number }>({ title, table, firmaId, rows,
                   <tr key={r.id}>
                     {columns.map(c => <td key={c.label} className={c.className}>{c.render(r)}</td>)}
                     <td className="whitespace-nowrap text-right">
+                      {actions?.(r)}
                       <button className="btn btn-ghost btn-xs" onClick={() => setEditing(r as unknown as Values)}>Bearbeiten</button>
                       <button className="btn btn-ghost btn-xs text-error" onClick={() => remove(r)}>Löschen</button>
                     </td>

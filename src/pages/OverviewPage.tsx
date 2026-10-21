@@ -94,9 +94,13 @@ export default function OverviewPage() {
                 <ul className="text-sm divide-y divide-base-200 border-t border-base-200">
                   {[...f.kontakt].sort((a, b) => a.name.localeCompare(b.name)).map(k => (
                     <li key={k.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-1.5">
-                      <span className="font-medium sm:w-40 sm:shrink-0">{k.name}</span>
+                      <span className="sm:w-40 sm:shrink-0">
+                        <span className="font-medium">{k.name}</span>
+                        {k.funktion && <span className="block text-xs text-base-content/60">{k.funktion}</span>}
+                      </span>
                       {k.email && <a href={`mailto:${k.email}`} className="link link-hover text-base-content/70">{k.email}</a>}
                       {k.telefon && <a href={`tel:${k.telefon.replace(/\s/g, '')}`} className="link link-hover text-base-content/70 whitespace-nowrap">{formatTelefon(k.telefon)}</a>}
+                      {k.mobile && <a href={`tel:${k.mobile.replace(/\s/g, '')}`} className="link link-hover text-base-content/70 whitespace-nowrap">{formatTelefon(k.mobile)}</a>}
                       <span className="ml-auto shrink-0"><RollenBadges rollen={k.rollen} kompakt /></span>
                     </li>
                   ))}

@@ -10,6 +10,7 @@ import {
 import { RecordFields, RecordModal, type Values } from '../components/RecordForm'
 import { toDb, toForm } from '../lib/form'
 import { formatTelefon, toUrl } from '../lib/mask'
+import { downloadVcard } from '../lib/vcard'
 import { Section } from '../components/Section'
 import { Dokumente } from '../components/Dokumente'
 import { ErfasstBadges, KuendigungHinweise } from '../components/FirmaInfo'
@@ -112,6 +113,7 @@ function FirmaDetailPage({ id }: { id: number }) {
 
           <div className="grid gap-x-6 gap-y-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
             <Info label="Tenant" value={firma.tenant} link />
+            <Info label="Telefon Zentrale" value={firma.telefon_zentrale && formatTelefon(firma.telefon_zentrale)} />
             <Info label="Timetracker-Kunde" value={customer?.name} />
             <Info label="Strahlhorn-User" value={firma.anzahl_strahlhorn_user?.toString()} />
             <Info label="Adresse" value={firma.adresse} pre />
@@ -156,11 +158,14 @@ function FirmaDetailPage({ id }: { id: number }) {
             deleteLabel={k => k.name}
             columns={[
               { label: 'Name', render: k => k.name },
+              { label: 'Funktion', render: k => k.funktion },
               { label: 'Rollen', render: k => <RollenBadges rollen={k.rollen} /> },
               { label: 'E-Mail', render: k => k.email && <a className="link link-hover" href={`mailto:${k.email}`}>{k.email}</a> },
-              { label: 'Telefon', render: k => k.telefon && <span className="whitespace-nowrap">{formatTelefon(k.telefon)}</span> },
+              { label: 'Telefon direkt', render: k => k.telefon && <span className="whitespace-nowrap">{formatTelefon(k.telefon)}</span> },
+              { label: 'Mobile', render: k => k.mobile && <span className="whitespace-nowrap">{formatTelefon(k.mobile)}</span> },
               { label: 'Segment', render: k => k.ml_segment },
             ]}
+            actions={k => <button className="btn btn-ghost btn-xs" title="Als vCard herunterladen" onClick={() => downloadVcard(k, firma)}>vCard</button>}
           />
         )}
 

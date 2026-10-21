@@ -7,16 +7,16 @@ insert into services (name, price_per_hour) values ('Support', 150);
 insert into time_entries (employee_id, customer_id, service_id, date, duration_minutes)
 select 1, 1, 1, (current_date - (n * 9))::date, 60 + (n % 4) * 30 from generate_series(0, 40) n;
 
-insert into firma (name, kuerzel, status, tenant, adresse, customer_id, anzahl_strahlhorn_user) values
-  ('Testverlag Alpen AG', 'TVA', 'Kunde', 'alpen', 'Musterstrasse 1' || chr(10) || '3000 Bern', 1, 8),
-  ('Musterpresse GmbH', 'MUP', 'Pilot', 'muster', null, 2, 3),
-  ('Beispiel Medien', 'BME', 'Interessent', null, null, null, null);
+insert into firma (name, kuerzel, status, tenant, adresse, customer_id, anzahl_strahlhorn_user, telefon_zentrale) values
+  ('Testverlag Alpen AG', 'TVA', 'Kunde', 'alpen', 'Musterstrasse 1' || chr(10) || '3000 Bern', 1, 8, '+41 31 000 00 00'),
+  ('Musterpresse GmbH', 'MUP', 'Pilot', 'muster', null, 2, 3, null),
+  ('Beispiel Medien', 'BME', 'Interessent', null, null, null, null, null);
 
-insert into kontakt (firma_id, name, rollen, email, telefon, ml_segment) values
-  (1, 'Anna Beispiel', '{Entscheider,Rechnung}', 'anna@example.com', '+41 31 000 00 01', 'Kunden'),
-  (1, 'Beat Muster', '{Technisch,Fachlich}', 'beat@example.com', null, 'Kunden'),
-  (2, 'Carla Test', '{Entscheider}', 'carla@example.com', null, 'Pilot'),
-  (3, 'Dario Probe', '{}', null, '+41 44 000 00 02', null);
+insert into kontakt (firma_id, name, rollen, funktion, email, telefon, mobile, ml_segment) values
+  (1, 'Anna Beispiel', '{Entscheider,Rechnung}', 'CDO', 'anna@example.com', '+41 31 000 00 01', '+41 79 000 00 01', 'Kunden'),
+  (1, 'Beat Muster', '{Technisch,Fachlich}', null, 'beat@example.com', null, null, 'Kunden'),
+  (2, 'Carla Test', '{Entscheider}', 'Verlagsleiterin', 'carla@example.com', null, null, 'Pilot'),
+  (3, 'Dario Probe', '{}', null, null, '+41 44 000 00 02', null, null);
 
 insert into lizenz (firma_id, produkt, start, ende, kuendigungsfrist_tage, betrag_chf, preismodell, abrechnungsintervall) values
   (1, 'Strahlhorn Standard', current_date - 300, current_date + 400, 90, 12000, 'Grundgebühr 6''000 + CHF 0.80 pro Abo über 5''000', 'jährlich'),

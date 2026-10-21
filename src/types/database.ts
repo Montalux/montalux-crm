@@ -10,6 +10,7 @@ export interface Firma {
   notiz: string | null
   customer_id: number | null
   anzahl_strahlhorn_user: number | null
+  telefon_zentrale: string | null
   created_at: string
 }
 
@@ -18,8 +19,10 @@ export interface Kontakt {
   firma_id: number
   name: string
   rollen: string[]
+  funktion: string | null
   email: string | null
   telefon: string | null
+  mobile: string | null
   ml_segment: string | null
   notiz: string | null
 }

@@ -15,6 +15,7 @@ Schlankes CRM für die Strahlhorn-Kunden von Montalux. Kein Sales-Tool: Firmen, 
 
 `supabase/migrations/001_init.sql`: firma, kontakt (rollen als text[]), lizenz, modul, avv, dazu View `lizenz_kuendigung`.
 `002_erweiterungen.sql`: firma.customer_id (→ Timetracker `customers`), firma.anzahl_strahlhorn_user, lizenz.preismodell/abrechnungsintervall, Tabellen abo_stand, projekt, wiedervorlage, dokument, View `firma_stunden_monat`, privater Bucket `crm-dokumente`.
+`003_kontakt_telefon.sql`: kontakt.funktion, kontakt.mobile (kontakt.telefon = Telefon direkt), firma.telefon_zentrale.
 
 RLS ist aktiv. Zugriff nur mit JWT-Claim `app_metadata.crm = true`, weil im selben Projekt die Timetracker-User liegen können und nicht jeder Kundendaten sehen soll. Claim für Pascals User setzen (Dashboard oder Admin-API), bevor etwas testbar ist.
 
@@ -31,6 +32,7 @@ Rollen: Entscheider, Fachlich, Technisch, Rechnung, Datenschutz. Status: Kunde, 
 7. **Wiedervorlage:** pro Firma, Block «Fällig» auf der Übersicht (überfällig + 7 Tage). Keine Mails.
 8. **Vertrag:** Preismodell als Freitext (Verträge sind je Kunde individuell, das CRM rechnet nichts), Abo-Stand von Hand nachgetragen mit Veränderung zum Vorwert.
 9. **Projekte** ohne Rechnungen, **Dokumente** als Upload oder Link, **Stunden** pro Monat aus dem Timetracker (nur lesen).
+10. **vCard:** pro Kontakt Download als `.vcf` (vCard 3.0) mit Firma, Funktion, E-Mail, Telefon direkt, Mobile, Zentrale und Adresse der Firma.
 
 Logik portiert nach `src/lib/crm.ts` (`kuendigungInfo`, `firmaStats`).
 

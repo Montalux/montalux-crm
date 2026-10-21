@@ -13,6 +13,7 @@ export function firmaFields(customers: Customer[]): Field[] {
       key: 'customer_id', label: 'Kunde im Timetracker', type: 'select',
       options: customers.map(c => ({ value: String(c.id), label: c.active ? c.name : `${c.name} (inaktiv)` })),
     },
+    { key: 'telefon_zentrale', label: 'Telefon Zentrale', type: 'tel' },
     { key: 'anzahl_strahlhorn_user', label: 'Anzahl Strahlhorn-User', type: 'number' },
     { key: 'adresse', label: 'Adresse', type: 'textarea' },
     { key: 'notiz', label: 'Notiz', type: 'textarea' },
@@ -21,9 +22,11 @@ export function firmaFields(customers: Customer[]): Field[] {
 
 export const kontaktFields: Field[] = [
   { key: 'name', label: 'Name', type: 'text', required: true },
+  { key: 'funktion', label: 'Funktion', type: 'text' },
   { key: 'rollen', label: 'Rollen', type: 'multi', options: ROLLEN },
   { key: 'email', label: 'E-Mail', type: 'email' },
-  { key: 'telefon', label: 'Telefon', type: 'tel' },
+  { key: 'telefon', label: 'Telefon direkt', type: 'tel' },
+  { key: 'mobile', label: 'Mobile', type: 'tel' },
   { key: 'ml_segment', label: 'MailerLite-Segment', type: 'text' },
   { key: 'notiz', label: 'Notiz', type: 'textarea' },
 ]

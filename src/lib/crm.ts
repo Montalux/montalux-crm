@@ -1,6 +1,7 @@
 import type { Avv, FirmaFull, Lizenz } from '../types/database'
 
-export const ROLLEN = ['Entscheider', 'Fachlich', 'Technisch', 'Rechnung', 'Datenschutz']
+// kontakt.rollen[0] is the primary role
+export const ROLLEN = ['Entscheider', 'Fachlich', 'Technisch', 'Rechnung', 'Datenschutz', 'Strahlhorn User', 'Extern']
 export const STATUS = ['Kunde', 'Pilot', 'Interessent', 'Ex-Kunde']
 export const PROJEKT_STATUS = ['Offeriert', 'Laufend', 'Abgeschlossen', 'Verworfen']
 export const INTERVALLE = ['monatlich', 'quartalsweise', 'halbjährlich', 'jährlich']
@@ -13,6 +14,13 @@ export const ROLLEN_FARBE: Record<string, string> = {
   Technisch: 'badge-neutral',
   Rechnung: 'badge-warning',
   Datenschutz: 'badge-success',
+  'Strahlhorn User': 'badge-primary',
+  Extern: 'badge-ghost',
+}
+
+// Short label for the compact view (overview)
+export const ROLLEN_KUERZEL: Record<string, string> = {
+  Entscheider: 'E', Fachlich: 'F', Technisch: 'T', Rechnung: 'R', Datenschutz: 'D', 'Strahlhorn User': 'S', Extern: 'Ext.',
 }
 
 // Coloured left edge of a Firma card

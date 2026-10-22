@@ -16,10 +16,11 @@ Schlankes CRM für die Strahlhorn-Kunden von Montalux. Kein Sales-Tool: Firmen, 
 `supabase/migrations/001_init.sql`: firma, kontakt (rollen als text[]), lizenz, modul, avv, dazu View `lizenz_kuendigung`.
 `002_erweiterungen.sql`: firma.customer_id (→ Timetracker `customers`), firma.anzahl_strahlhorn_user, lizenz.preismodell/abrechnungsintervall, Tabellen abo_stand, projekt, wiedervorlage, dokument, View `firma_stunden_monat`, privater Bucket `crm-dokumente`.
 `003_kontakt_telefon.sql`: kontakt.funktion, kontakt.mobile (kontakt.telefon = Telefon direkt), firma.telefon_zentrale.
+`004_rollen.sql`: Rollen «Strahlhorn User» und «Extern». Das erste Element von kontakt.rollen ist die Hauptrolle.
 
 RLS ist aktiv. Zugriff nur mit JWT-Claim `app_metadata.crm = true`, weil im selben Projekt die Timetracker-User liegen können und nicht jeder Kundendaten sehen soll. Claim für Pascals User setzen (Dashboard oder Admin-API), bevor etwas testbar ist.
 
-Rollen: Entscheider, Fachlich, Technisch, Rechnung, Datenschutz. Status: Kunde, Pilot, Interessent, Ex-Kunde.
+Rollen: Entscheider, Fachlich, Technisch, Rechnung, Datenschutz, Strahlhorn User, Extern. Eine davon ist Hauptrolle (im Formular per Stern, in Tabellen sichtbar, weitere hinter «+n»). Status: Kunde, Pilot, Interessent, Ex-Kunde.
 
 ## Funktionen (Reihenfolge = Priorität)
 

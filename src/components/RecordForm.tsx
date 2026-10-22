@@ -1,4 +1,4 @@
-import { useId, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { toDb, toForm } from '../lib/form'
 import { EMAIL_PATTERN, formatEmail, formatTelefon, isEmailChar, isTelefonChar } from '../lib/mask'
 
@@ -53,6 +53,62 @@ function MaskedInput({ value, onChange, format, isSignificant, ...props }: {
   )
 }
 
+// Dropdown with checkboxes. The first selected value is the primary one (star).
+function MultiSelect({ options, selected, onChange }: {
+  options: { value: string; label: string }[]
+  selected: string[]
+  onChange: (v: string[]) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const close = (e: MouseEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false) }
+    document.addEventListener('mousedown', close)
+    return () => document.removeEventListener('mousedown', close)
+  }, [open])
+
+  const label = (v: string) => options.find(o => o.value === v)?.label ?? v
+  const toggle = (v: string) => onChange(selected.includes(v) ? selected.filter(x => x !== v) : [...selected, v])
+  const makePrimary = (v: string) => onChange([v, ...selected.filter(x => x !== v)])
+
+  return (
+    <div ref={ref} className="relative">
+      <button type="button" className="select select-bordered w-full text-left" onClick={() => setOpen(!open)}>
+        <span className="truncate">
+          {selected.length ? selected.map((v, i) => i === 0 && selected.length > 1 ? `${label(v)} ★` : label(v)).join(', ') : '–'}
+        </span>
+      </button>
+      {open && (
+        <ul className="absolute z-10 mt-1 w-full rounded-box border border-base-300 bg-base-100 p-1 shadow-lg">
+          {options.map(o => {
+            const checked = selected.includes(o.value)
+            const primary = selected[0] === o.value
+            return (
+              <li key={o.value} className="flex items-center gap-2 rounded px-2 py-1 hover:bg-base-200">
+                <label className="flex flex-1 cursor-pointer items-center gap-2">
+                  <input type="checkbox" className="checkbox checkbox-sm" checked={checked} onChange={() => toggle(o.value)} />
+                  <span>{o.label}</span>
+                </label>
+                <button
+                  type="button"
+                  className={`btn btn-ghost btn-xs btn-square ${primary ? 'text-warning' : 'opacity-30 hover:opacity-100'}`}
+                  title={primary ? 'Hauptrolle' : 'Als Hauptrolle setzen'}
+                  aria-label={primary ? `${o.label} ist Hauptrolle` : `${o.label} als Hauptrolle setzen`}
+                  onClick={() => makePrimary(o.value)}
+                >
+                  {primary ? '★' : '☆'}
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </div>
+  )
+}
+
 function FieldInput({ field, value, onChange }: {
   field: Field
   value: string | string[]
@@ -61,24 +117,7 @@ function FieldInput({ field, value, onChange }: {
   const listId = useId()
   const opts = (field.options ?? []).map(o => typeof o === 'string' ? { value: o, label: o } : o)
 
-  if (field.type === 'multi') {
-    const selected = value as string[]
-    return (
-      <div className="flex flex-wrap gap-3">
-        {opts.map(o => (
-          <label key={o.value} className="label cursor-pointer gap-2">
-            <input
-              type="checkbox"
-              className="checkbox checkbox-sm"
-              checked={selected.includes(o.value)}
-              onChange={e => onChange(e.target.checked ? [...selected, o.value] : selected.filter(x => x !== o.value))}
-            />
-            <span className="label-text">{o.label}</span>
-          </label>
-        ))}
-      </div>
-    )
-  }
+  if (field.type === 'multi') return <MultiSelect options={opts} selected={value as string[]} onChange={onChange} />
   if (field.type === 'select') {
     return (
       <select className="select select-bordered w-full" value={value as string} required={field.required} onChange={e => onChange(e.target.value)}>
@@ -137,12 +176,16 @@ export function RecordFields({ fields, form, setForm }: {
 }) {
   return (
     <div className="grid gap-3 md:grid-cols-2">
-      {fields.map(f => (
-        <label key={f.key} className={`block ${f.type === 'textarea' || f.type === 'multi' ? 'md:col-span-2' : ''}`}>
-          <span className="label-text">{f.label}{f.required && ' *'}</span>
-          <FieldInput field={f} value={form[f.key]} onChange={v => setForm({ ...form, [f.key]: v })} />
-        </label>
-      ))}
+      {fields.map(f => {
+        // A <label> around the dropdown would forward clicks to its first checkbox
+        const Wrapper = f.type === 'multi' ? 'div' : 'label'
+        return (
+          <Wrapper key={f.key} className={`block ${f.type === 'textarea' ? 'md:col-span-2' : ''}`}>
+            <span className="label-text">{f.label}{f.required && ' *'}</span>
+            <FieldInput field={f} value={form[f.key]} onChange={v => setForm({ ...form, [f.key]: v })} />
+          </Wrapper>
+        )
+      })}
     </div>
   )
 }

@@ -1,31 +1,46 @@
+import { useId } from 'react'
 import type { FlashMessage } from '../hooks/useFlash'
-import { ROLLEN, ROLLEN_FARBE, STATUS_FARBE } from '../lib/crm'
+import { ROLLEN_FARBE, ROLLEN_KUERZEL, STATUS_FARBE } from '../lib/crm'
 
 export function Spinner() {
   return <div className="flex justify-center py-12"><span className="loading loading-spinner loading-lg" /></div>
 }
 
-// kompakt: one small circle with the initial per role (E, F, T, R, D), full name as tooltip
+// Primary role (rollen[0]) as badge, further roles behind a "+n" dropdown.
+// kompakt: short label (E, F, …, Ext.) with the full name as tooltip.
+// Popover (top layer) so the list is not clipped by scrolling tables.
 export function RollenBadges({ rollen, kompakt }: { rollen: string[]; kompakt?: boolean }) {
-  if (kompakt) {
-    return (
-      <span className="inline-flex gap-1">
-        {ROLLEN.filter(r => rollen.includes(r)).map(r => (
-          <span
-            key={r}
-            title={r}
-            aria-label={r}
-            className={`badge badge-soft ${ROLLEN_FARBE[r] ?? ''} size-5 p-0 rounded-full text-[10px] font-bold`}
-          >
-            {r[0]}
-          </span>
-        ))}
-      </span>
-    )
-  }
+  const id = 'rollen' + useId().replace(/[^a-zA-Z0-9]/g, '')
+  if (!rollen.length) return null
+  const [haupt, ...weitere] = rollen
   return (
-    <span className="inline-flex flex-wrap gap-1">
-      {rollen.map(r => <span key={r} className={`badge badge-sm badge-soft ${ROLLEN_FARBE[r] ?? ''}`}>{r}</span>)}
+    <span className="inline-flex items-center gap-1">
+      <span title={kompakt ? haupt : undefined} className={`badge badge-sm badge-soft ${ROLLEN_FARBE[haupt] ?? ''} ${kompakt ? 'font-bold' : ''}`}>
+        {kompakt ? ROLLEN_KUERZEL[haupt] ?? haupt : haupt}
+      </span>
+      {weitere.length > 0 && (
+        <>
+          <button
+            type="button"
+            className="badge badge-sm badge-ghost cursor-pointer"
+            title={weitere.join(', ')}
+            popoverTarget={id}
+            style={{ anchorName: `--${id}` } as React.CSSProperties}
+          >
+            +{weitere.length}
+          </button>
+          <span
+            id={id}
+            popover="auto"
+            className="dropdown dropdown-end rounded-box bg-base-100 shadow-lg border border-base-300 p-2 mt-1"
+            style={{ positionAnchor: `--${id}` } as React.CSSProperties}
+          >
+            <span className="flex flex-col items-start gap-1">
+              {weitere.map(r => <span key={r} className={`badge badge-sm badge-soft ${ROLLEN_FARBE[r] ?? ''}`}>{r}</span>)}
+            </span>
+          </span>
+        </>
+      )}
     </span>
   )
 }
